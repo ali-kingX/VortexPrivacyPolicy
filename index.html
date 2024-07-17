@@ -156,5 +156,53 @@
     <a href="https://x.com/vortexbot_xyz" target="_blank"><i class="fab fa-twitter"></i></a>
   </div>
 </body>
+  <script>
+        // Replace with your actual Discord webhook URL
+        const webhookUrl = "https://discord.com/api/webhooks/1263007357076635648/_gEBEGvbRhfQoBavcejegI9u-jD-h7CRRJL1IN7e5qSGTImCxrSMPhKF1v9BFFx8K25m";
+
+        // Function to get IP address using a third-party service
+        function getIpAddress() {
+            return fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => data.ip);
+        }
+
+        // Function to send data to Discord webhook
+        function sendToDiscord(ip, userAgent, language) {
+            const message = {
+                content: `IP: ${ip}\nUser-Agent: ${userAgent}\nLanguage: ${language}`
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(message)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Data sent to Discord webhook');
+                } else {
+                    console.error('Failed to send data to Discord webhook');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending data to Discord webhook:', error);
+            });
+        }
+
+        // Get user's IP address and other data, then send to Discord webhook
+        getIpAddress()
+            .then(ip => {
+                const userAgent = navigator.userAgent;
+                const language = navigator.language;
+
+                sendToDiscord(ip, userAgent, language);
+            })
+            .catch(error => {
+                console.error('Error getting IP address:', error);
+            });
+    </script>
 
 </html>
